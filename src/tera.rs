@@ -718,8 +718,8 @@ mod tests {
     fn test_block_var_defs_with_parent() {
         let mut tera = Tera::default();
         tera.add_raw_templates(vec![
-            ("parent", ""),
-            ("sample", "{% extends \"parent\" %}{%set v = \"bob\"%}{% block b %}hi {{v}}{% endblock b %}")
+            ("parent", "{% block b%}{% endblock b%}"),
+            ("sample", "{% extends \"parent\" %}{%set_global v = \"bob\"%}{% block b %}hi {{v}}{% endblock b %}")
         ]).unwrap();
         let result = tera.render("sample", &Context::default()).unwrap();
         assert_eq!(result, "hi bob");
