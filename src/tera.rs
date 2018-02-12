@@ -705,6 +705,27 @@ mod tests {
     }
 
     #[test]
+    fn test_block_var_defs() {
+        let mut tera = Tera::default();
+        tera.add_raw_templates(vec![
+           ("sample", "{%set v = \"bob\"%}{% block b %}hi {{v}}{% endblock b %}")
+        ]).unwrap();
+        let result = tera.render("sample", &Context::default()).unwrap();
+        assert_eq!(result, "hi bob");
+    }
+
+    #[test]
+    fn test_block_var_defs_with_parent() {
+        let mut tera = Tera::default();
+        tera.add_raw_templates(vec![
+            ("parent", ""),
+            ("sample", "{% extends \"parent\" %}{%set v = \"bob\"%}{% block b %}hi {{v}}{% endblock b %}")
+        ]).unwrap();
+        let result = tera.render("sample", &Context::default()).unwrap();
+        assert_eq!(result, "hi bob");
+    }
+
+    #[test]
     fn test_can_autoescape_one_off_template() {
         let mut context = Context::new();
         context.add("greeting", &"<p>");
