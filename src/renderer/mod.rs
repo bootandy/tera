@@ -674,6 +674,21 @@ impl<'a> Renderer<'a> {
             None => (&self.template.name, &self.template.ast),
         };
 
+        // Runs through the current template and sets any variables for the current template.
+        // TODO: Should live in different function.
+        let mut temps :Vec<&String> = self.template.parents.iter().map(|a| {a}).collect();
+        temps.push(&self.template.name);
+
+        for p in temps {
+            let tpl = self.tera.get_template(p.as_ref()).unwrap();
+            for node in &tpl.ast {
+                let _x = match *node {
+                    Node::Set(_, ref set) => self.eval_set(set).and(Ok(String::new()))?,
+                    _ => "".to_string(),
+                };
+            }
+        }
+
         self.import_template_macros(tpl_name)?;
 
         let mut output = String::new();
