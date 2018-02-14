@@ -720,6 +720,16 @@ mod tests {
     }
 
     #[test]
+    fn test_var_access_by_variable() {
+        let mut context = Context::new();
+        context.add("var", &Test{a:"hi".into(), b:"there".into(), c: vec!["no".into(), "fred".into()]});
+        context.add("a", "b");
+        context.add("i", &1);
+        let result = Tera::one_off("{{var[a]}} {{var['c'][i]}}",& context, true).unwrap();
+        assert_eq!(result, "there fred")
+    }
+
+    #[test]
     fn test_can_autoescape_one_off_template() {
         let mut context = Context::new();
         context.add("greeting", &"<p>");

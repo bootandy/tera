@@ -64,7 +64,7 @@ dotted_ident = @{
 }
 
 dotted_square_bracket_ident = @{
-    dotted_ident ~ ( ("." ~ all_chars+) | ("[" ~ (int | string) ~ "]") )*
+    dotted_ident ~ ( ("." ~ all_chars+) | ("[" ~ (int | string | ident) ~ "]") )*
 }
 
 // ----------------------------------------------------
